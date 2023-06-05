@@ -9,7 +9,7 @@ export default function InputPrompt() {
     e.preventDefault();
     console.log(prompt);
     try {
-      const response = await fetch("http://localhost:5000/getImage", {
+      const response = await fetch("http://localhost:5000/api/getImage", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export default function InputPrompt() {
   const saveNFT = async () => {
     try {
       // Store image to IPFS(piniata)
-      await fetch("http://localhost:5000/saveImg", {
+      await fetch("http://localhost:5000/api/saveImg", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,9 +62,7 @@ export default function InputPrompt() {
         />
         <button type="submit">Generate</button>
       </form>
-      <button type="submit" onClick={saveNFT}>
-        Save NFT
-      </button>
+      <button onClick={saveNFT}>Save NFT</button>
     </>
   );
 }
