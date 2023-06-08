@@ -20,23 +20,7 @@ export default function SaveNftToMetamask() {
     contract: null,
   });
 
-  const [URIArr, setURIArr] = useState<string[]>([]);
-
-  const [account, setAccount] = useState("none");
-
-  useEffect(() => {
-    const fetchArr = async () => {
-      const response = await fetch("http://localhost:5000/api/getURI", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      setURIArr(data);
-    };
-    fetchArr();
-  }, []);
+  const [account, setAccount] = useState<string>("none");
 
   // Connecting to metamask
   const connectWallet = async () => {

@@ -1,15 +1,21 @@
 // import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import InputPrompt from "./Components/InputPrompt";
-import SaveNftToMetamask from "./Components/SaveNftToMetamask";
+import GenerateNFT from "./Pages/GenerateNFT";
+import ShowMyNFTs from "./Pages/ShowMyNFTs";
+import { NFTprovider } from "./Components/context/NFTcontext";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <>
-      <InputPrompt />
-      <SaveNftToMetamask />
-    </>
+    <NFTprovider>
+      <Router>
+        <Routes>
+          <Route path="generateNFT" element={<GenerateNFT />} />
+          <Route path="showNFT" element={<ShowMyNFTs />} />
+        </Routes>
+      </Router>
+    </NFTprovider>
   );
-}
+};
 
 export default App;
