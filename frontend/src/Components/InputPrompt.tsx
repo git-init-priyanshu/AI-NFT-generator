@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "./Image";
+// import SaveNftToMetamask from "./SaveNftToMetamask";
 
 export default function InputPrompt() {
   const [image, setImage] = useState<string[]>([]);

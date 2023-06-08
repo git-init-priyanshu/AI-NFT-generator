@@ -4,6 +4,7 @@ const router = express.Router();
 var request = require("request");
 
 router.post("/getImage", async (req, res) => {
+  // from stable diffusion's docs
   var options = {
     method: "POST",
     url: "https://stablediffusionapi.com/api/v3/text2img",
