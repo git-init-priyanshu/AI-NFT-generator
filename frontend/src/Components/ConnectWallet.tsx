@@ -1,15 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
 
 import { NFTcontext } from "./context/NFTcontext";
 import { formatBalance, formatChainAsNum } from "../contract/utils/util.tsx";
-import abi from "../contract/contract_abi.json";
-
-const contractAddress = "0xF05CdcC75b9264a5B0e3F4D53ce837Fe0327077F";
 
 export default function SaveNftToMetamask() {
-  const { setState, setAccount, data } = useContext(NFTcontext);
+  const { setAccount } = useContext(NFTcontext);
   // const { setAccount } = useContext(NFTcontext);
 
   const [hasProvider, setHasProvider] = useState<boolean | null>(null);
@@ -86,17 +83,6 @@ export default function SaveNftToMetamask() {
         setErrorMessage(err.message);
       });
     setIsConnecting(false);
-
-    // Quicknode HTTP provider
-    const provider = ethers.getDefaultProvider(data.provider_url);
-    // Metamask private key
-    const privateKey = data.private_key;
-    const signer = new ethers.Wallet(privateKey, provider);
-
-    // Getting the deployed contract
-    const contract = new ethers.Contract(contractAddress, abi, signer);
-
-    setState({ provider, signer, contract });
   };
 
   const disableConnect = Boolean(wallet) && isConnecting;
@@ -105,12 +91,12 @@ export default function SaveNftToMetamask() {
     <div className="App">
       <div>Injected Provider {hasProvider ? "DOES" : "DOES NOT"} Exist</div>
 
-      {/* {window.ethereum?.isMetaMask && wallet.accounts.length < 1 && (
+      {window.ethereum?.isMetaMask && wallet.accounts.length < 1 && (
         <button disabled={disableConnect} onClick={connectWallet}>
           Connect MetaMask
         </button>
-      )} */}
-      <button onClick={connectWallet}>Connect Metamask</button>
+      )}
+      {/* <button onClick={connectWallet}>Connect Metamask</button> */}
 
       {wallet.accounts.length > 0 && (
         <>

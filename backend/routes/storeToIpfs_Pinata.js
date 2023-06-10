@@ -11,62 +11,75 @@ const FormData = require("form-data");
 // from pinata's doc
 router.post("/saveImg", async (req, res) => {
   const src = req.body.imgURL;
-  uploadToPinata(src);
+  const response = await uploadToPinata(src);
+
+  // Getting hash of latest upload
+  const hash = response.IpfsHash;
+  const url = `https://gateway.pinata.cloud/ipfs/${hash}`;
+  // Uploading metadata
+  const data = await uploadMetadata(url);
+  const metadata_hash = data.IpfsHash;
+
+  res.json({ token_URI: `https://gateway.pinata.cloud/ipfs/${metadata_hash}` });
 });
 
 const uploadToPinata = async (sourceUrl) => {
-  const axiosInstance = axios.create();
-  axiosRetry(axiosInstance, { retries: 5 });
+  return new Promise(async (resolve, reject) => {
+    const axiosInstance = axios.create();
+    axiosRetry(axiosInstance, { retries: 5 });
 
-  const data = new FormData();
+    const data = new FormData();
 
-  const response = await axiosInstance(sourceUrl, {
-    method: "GET",
-    responseType: "stream",
+    try {
+      const response = await axiosInstance(sourceUrl, {
+        method: "GET",
+        responseType: "stream",
+      });
+      data.append(`file`, response.data);
+
+      const res = await axios.post(
+        "https://api.pinata.cloud/pinning/pinFileToIPFS",
+        data,
+        {
+          maxBodyLength: Infinity,
+          headers: {
+            "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
+            Authorization: `Bearer ${process.env.JWT}`,
+          },
+        }
+      );
+      resolve(res.data); // Resolve the promise with the desired value
+    } catch (error) {
+      reject(error); // Reject the promise with the error
+    }
   });
-  data.append(`file`, response.data);
-
-  try {
-    const response = await axios.post(
-      "https://api.pinata.cloud/pinning/pinFileToIPFS",
-      data,
-      {
-        maxBodyLength: "Infinity",
-        headers: {
-          "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
-          Authorization: `Bearer ${process.env.JWT}`,
-        },
-      }
-    );
-    // ipfsHash.push(response.data.IpfsHash);
-    // console.log(response.data.IpfsHash);
-  } catch (error) {
-    console.log(error);
-  }
 };
 
-router.get("/getURI", async (req, res) => {
-  try {
-    const config = {
-      method: "get",
-      url: "https://api.pinata.cloud/data/pinList?status=pinned&pinSizeMin=100",
-      headers: {
-        Authorization: `Bearer ${process.env.JWT}`,
-      },
-    };
-    const response = await axios(config);
+const uploadMetadata = async (url) => {
+  return new Promise(async (resolve, reject) => {
+    var metaData = JSON.stringify({
+      name: "My NFT",
+      description: "Description of my NFT",
+      image: `${url}`,
+    });
+    try {
+      var config = {
+        method: "post",
+        url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.JWT}`,
+        },
+        data: metaData,
+      };
 
-    let URI = [];
-    let ipfsHash = response.data.rows;
-    for (let i = 0; i < ipfsHash.length; i++) {
-      const hash = ipfsHash[i].ipfs_pin_hash;
+      const res = await axios(config);
 
-      URI.push(`https://gateway.pinata.cloud/ipfs/${hash}`);
+      resolve(res.data);
+    } catch (error) {
+      reject(error);
     }
-    res.send(URI);
-  } catch (error) {
-    res.send(error);
-  }
-});
+  });
+};
 
 module.exports = router;

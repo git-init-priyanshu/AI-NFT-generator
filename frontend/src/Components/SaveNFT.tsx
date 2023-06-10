@@ -1,18 +1,46 @@
+import { useState, useContext, useEffect } from "react";
+import axios from "axios";
 import { ethers } from "ethers";
-import { useContext } from "react";
-import { NFTcontext } from "./context/NFTcontext";
+
+import abi from "../contract/contract_abi.json";
+// import { NFTcontext } from "./context/NFTcontext";
+
+const contractAddress = "0xF05CdcC75b9264a5B0e3F4D53ce837Fe0327077F";
 
 type saveProps = {
   image: string[];
 };
+type data = {
+  provider_url: string;
+  private_key: string;
+};
 
 const SaveNFT = ({ image }: saveProps) => {
-  const { state } = useContext(NFTcontext);
+  const [data, setData] = useState<data | null>(null);
+  // const [URI, setURI] = useState<string | null>(null);
+
+  // Connecting to deployed Contract
+  // Getting Quicknode HTTP provider URL and Metamask Private key from backend
+  useEffect(() => {
+    const fetchData = async () => {
+      const config = {
+        method: "get",
+        url: "http://localhost:5000/api/getdata",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await axios(config);
+      const data: data = response.data;
+      setData(data);
+    };
+    fetchData();
+  }, []);
 
   const saveToIpfs = async () => {
+    // Store image to IPFS(Pinata)
     try {
-      // Store image to IPFS(piniata)
-      await fetch("http://localhost:5000/api/saveImg", {
+      const response = await fetch("http://localhost:5000/api/saveImg", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,23 +50,40 @@ const SaveNFT = ({ image }: saveProps) => {
           imgURL: image[0],
         }),
       });
+      const data = await response.json();
+      console.log(data.token_URI);
+
+      data && mintNFT(data.token_URI);
     } catch (error) {
       console.log(error);
     }
-
-    mintNFT();
   };
 
-  const mintNFT = async () => {
-    const { contract } = state;
+  const mintNFT = async (URI: string) => {
+    // Getting provider
+    const providerURL =
+      "https://sparkling-thrumming-meme.matic-testnet.discover.quiknode.pro/1c377d190c3a329a0c796f579b19945abc9a1d16/";
+    const provider = ethers.getDefaultProvider(providerURL);
+    // Metamask private key
+    const privateKey = data.private_key;
+    // Getting signer
+    const signer = new ethers.Wallet(privateKey, provider);
 
-    const amt = {
-      value: ethers.utils.parseEther("0.001"),
-      gasLimit: ethers.utils.parseEther("0.00000000001"),
-    };
-    const mint = await contract.awardItem("tokenURI", amt);
+    // Getting the deployed contract
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+
+    console.log(URI);
+    const mintNFT = URI && (await contract.awardItem(`${URI}`));
+    console.log(mintNFT);
   };
-  return <>{state ? <button onClick={saveToIpfs}>Save NFT</button> : ""}</>;
+
+  return (
+    <>
+      {/* {state ? <button onClick={saveToIpfs}>Save NFT</button> : ""}
+       */}
+      <button onClick={saveToIpfs}>GO</button>
+    </>
+  );
 };
 
 export default SaveNFT;

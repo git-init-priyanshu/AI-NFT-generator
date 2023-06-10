@@ -9,7 +9,6 @@ export default function InputPrompt() {
 
   const fetchApi = async (e) => {
     e.preventDefault();
-    console.log(prompt);
     try {
       const response = await fetch("http://localhost:5000/api/getImage", {
         method: "POST",
@@ -27,7 +26,6 @@ export default function InputPrompt() {
       }
 
       const data = await response.json();
-      console.log(data);
       setImage(data.output);
     } catch (error) {
       console.error(error);
