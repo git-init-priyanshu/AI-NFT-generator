@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { NFTcontext } from "../Components/context/NFTcontext";
 
-const ShowMyNFTs: React.FC = () => {
+const ShowMyNFTs = () => {
   const { URIArr } = useContext(NFTcontext);
   return (
     <div>

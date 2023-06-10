@@ -5,13 +5,13 @@ import GenerateNFT from "./Pages/GenerateNFT";
 import ShowMyNFTs from "./Pages/ShowMyNFTs";
 import { NFTprovider } from "./Components/context/NFTcontext";
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <NFTprovider>
       <Router>
         <Routes>
           <Route path="generateNFT" element={<GenerateNFT />} />
-          <Route path="showNFT" element={<ShowMyNFTs />} />
+          <Route path="showMyNFTs" element={<ShowMyNFTs />} />
         </Routes>
       </Router>
     </NFTprovider>

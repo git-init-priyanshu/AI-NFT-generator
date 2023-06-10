@@ -1,11 +1,11 @@
 // import React from "react";
 import InputPrompt from "../Components/InputPrompt";
-import SaveNftToMetamask from "../Components/SaveNftToMetamask";
+import ConnectWallet from "../Components/ConnectWallet";
 
 export default function GenerateNFT() {
   return (
     <>
-      <SaveNftToMetamask />
+      <ConnectWallet />
       <InputPrompt />
     </>
   );

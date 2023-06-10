@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "./Image";
+import SaveNFT from "./SaveNFT";
 // import SaveNftToMetamask from "./SaveNftToMetamask";
 
 export default function InputPrompt() {
@@ -33,24 +34,6 @@ export default function InputPrompt() {
     }
   };
 
-  const saveNFT = async () => {
-    try {
-      // Store image to IPFS(piniata)
-      await fetch("http://localhost:5000/api/saveImg", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          // Request payload
-          imgURL: image[0],
-        }),
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <>
       <Image image={image[0]} />
@@ -63,7 +46,7 @@ export default function InputPrompt() {
         />
         <button type="submit">Generate</button>
       </form>
-      <button onClick={saveNFT}>Save NFT</button>
+      <SaveNFT image={image} />
     </>
   );
 }
