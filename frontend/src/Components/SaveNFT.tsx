@@ -81,7 +81,12 @@ const SaveNFT = ({ image }: saveProps) => {
     <>
       {/* {state ? <button onClick={saveToIpfs}>Save NFT</button> : ""}
        */}
-      <button onClick={saveToIpfs}>GO</button>
+      <button
+        onClick={saveToIpfs}
+        className="mx-2 my-2 rounded-md bg-neutral-700 bg-opacity-80 p-2 hover:bg-neutral-800 hover:bg-opacity-75"
+      >
+        Save NFT
+      </button>
     </>
   );
 };

@@ -2,8 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;800&display=swap"); */
+
 body {
   margin: 0;
   padding: 0;
   width: 100%;
+  font-family: "Inter", sans-serif;
+}
+
+.circle {
+  height: 30px;
+  width: 30px;
+  background-image: linear-gradient(45deg, #0000ff, #ff00ff);
+  border-radius: 50%;
+}
+.image {
+  background: url("./assets/image_icon.png");
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  background-color: transparent;
+
+  --tw-bg-opacity: 0.8;
+  background-color: rgb(64 64 64 / var(--tw-bg-opacity));
+}
+
+.gradient-outline {
+  outline: none;
+  color: white;
+}
+
+.outline-gradient {
+  /* position: fixed; */
+  background-image: linear-gradient(90deg, #3b82f6, #ec4899);
 }

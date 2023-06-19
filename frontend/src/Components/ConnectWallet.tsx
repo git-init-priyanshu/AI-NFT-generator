@@ -4,6 +4,7 @@ import detectEthereumProvider from "@metamask/detect-provider";
 
 import { NFTcontext } from "./context/NFTcontext";
 import { formatBalance, formatChainAsNum } from "../contract/utils/util.tsx";
+import metamask from "../assets/MetaMask_Fox.svg.png";
 
 export default function SaveNftToMetamask() {
   const { setAccount } = useContext(NFTcontext);
@@ -88,29 +89,46 @@ export default function SaveNftToMetamask() {
   const disableConnect = Boolean(wallet) && isConnecting;
 
   return (
-    <div className="App">
-      <div>Injected Provider {hasProvider ? "DOES" : "DOES NOT"} Exist</div>
-
-      {window.ethereum?.isMetaMask && wallet.accounts.length < 1 && (
+    <div className=" flex justify-between items-center h-16">
+      {/* {window.ethereum?.isMetaMask && wallet.accounts.length < 1 && (
         <button disabled={disableConnect} onClick={connectWallet}>
           Connect MetaMask
         </button>
-      )}
-      {/* <button onClick={connectWallet}>Connect Metamask</button> */}
+      )} */}
+      <div>AI NFT Generator</div>
 
       {wallet.accounts.length > 0 && (
-        <>
-          <div>Wallet Accounts: {wallet.accounts[0]}</div>
-          <div>Wallet Balance: {wallet.balance}</div>
-          <div>Hex ChainId: {wallet.chainId}</div>
-          <div>Numeric ChainId: {formatChainAsNum(wallet.chainId)}</div>
-        </>
-      )}
-      {error && (
-        <div onClick={() => setError(false)}>
-          <strong>Error:</strong> {errorMessage}
+        <div className="rounded-md bg-neutral-700 bg-opacity-80 p-2 ">
+          {wallet.accounts[0] !== "none" ? wallet.accounts[0] : "Account: none"}
+          {/* Account: {wallet.accounts[0]} */}
         </div>
       )}
+
+      <div className="flex items-center">
+        {wallet.accounts[0] !== "none" ? (
+          <div className=" flex">
+            <div className="rounded-md bg-neutral-700 bg-opacity-80 p-2 flex items-center rounded-r-none border-r border-neutral-500 ">
+              {wallet.balance} MATIC
+            </div>
+            <div className=" bg-neutral-700 bg-opacity-80 p-2 flex items-center border-r border-neutral-500">
+              ChainId: {formatChainAsNum(wallet.chainId)}
+            </div>
+
+            <div className="rounded-md bg-neutral-700 bg-opacity-80 p-2 flex items-center rounded-l-none hover:cursor-pointer">
+              <div className=" circle"></div>
+            </div>
+          </div>
+        ) : (
+          <button
+            disabled={disableConnect}
+            onClick={connectWallet}
+            className="flex items-center rounded-md bg-neutral-700 bg-opacity-80 p-2  hover:bg-neutral-800 hover:bg-opacity-75"
+          >
+            <img src={metamask} className=" w-8 mr-2" />
+            Connect
+          </button>
+        )}
+      </div>
     </div>
   );
 }
