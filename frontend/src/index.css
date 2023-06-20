@@ -36,5 +36,24 @@ body {
 
 .outline-gradient {
   /* position: fixed; */
+}
+.btn {
+  position: relative;
+}
+
+.btn-outline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+  border: 2px solid transparent;
+  background-clip: padding-box;
   background-image: linear-gradient(90deg, #3b82f6, #ec4899);
+}
+
+.h-calc {
+  height: calc(100vh - 8.5rem);
 }

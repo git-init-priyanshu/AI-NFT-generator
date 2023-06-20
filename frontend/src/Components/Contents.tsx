@@ -36,24 +36,30 @@ export default function InputPrompt() {
 
   return (
     <div className=" flex w-full">
-      <Image image={image[0]} />
-      <div className=" w-1/2">
-        <form onSubmit={fetchApi}>
+      <div className=" w-1/2 h-calc">
+        <Image image={image[0]} />
+
+        <form
+          onSubmit={fetchApi}
+          className=" h-16 mt-2 w-full flex items-start"
+        >
           <input
             type="text"
             id="prompt"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder=" Enter your prompt"
-            className="outline-none rounded-md bg-neutral-700 bg-opacity-80 p-2 mx-2"
+            className="outline-none rounded-md bg-neutral-700 bg-opacity-80 p-2 w-max"
           />
           <button
             type="submit"
-            className="mx-2 rounded-md bg-neutral-700 bg-opacity-80 p-2 hover:bg-neutral-800 hover:bg-opacity-75"
+            className="ml-2 rounded-md bg-neutral-700 bg-opacity-80 p-2 hover:bg-neutral-800 hover:bg-opacity-75"
           >
             Generate
           </button>
         </form>
+      </div>
+      <div className=" w-1/2 h-calc">
         <SaveNFT image={image} />
       </div>
     </div>
