@@ -8,12 +8,9 @@ import metamask from "../assets/MetaMask_Fox.svg.png";
 export default function SaveNftToMetamask() {
   const { setAccount } = useContext(NFTcontext);
 
-  const [hasProvider, setHasProvider] = useState<boolean | null>(null);
   const initialState = { accounts: ["none"], balance: "", chainId: "" };
   const [wallet, setWallet] = useState(initialState);
   const [isConnecting, setIsConnecting] = useState(false);
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   // Connecting to metamask
   useEffect(() => {
@@ -32,7 +29,6 @@ export default function SaveNftToMetamask() {
 
     const getProvider = async () => {
       const provider = await detectEthereumProvider({ silent: true });
-      setHasProvider(Boolean(provider));
 
       if (provider) {
         const accounts = await window.ethereum.request({
@@ -73,13 +69,11 @@ export default function SaveNftToMetamask() {
         params: [],
       })
       .then((accounts: ["none"]) => {
-        setError(false);
         updateWallet(accounts);
         accounts && setAccount(accounts[0]);
       })
       .catch((err: any) => {
-        setError(true);
-        setErrorMessage(err.message);
+        console.log(err);
       });
     setIsConnecting(false);
   };

@@ -1,13 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Image from "./Image";
 import SaveNFT from "./SaveNFT";
-import { NFTcontext } from "./context/NFTcontext";
 
 export default function InputPrompt() {
   const [image, setImage] = useState<string[]>([]);
   const [prompt, setPrompt] = useState<string>("");
-
-  // const { APIkey } = useContext(NFTcontext);
 
   const fetchApi = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
