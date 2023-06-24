@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AIimg from "../assets/965.AI processor.jpg";
@@ -11,15 +11,19 @@ export default function StableDiffusionAPI() {
 
   const [text, setText] = useState<string>("");
 
-  const handleOnSubmit = () => {
-    setAPIkey(text);
-    navigate("/generateNFT");
+  const handleOnSubmit = (e: React.FormEvent<HTMLElement>) => {
+    e.preventDefault();
+    if (text !== "") {
+      sessionStorage.setItem("api-key", text);
+      setAPIkey(text);
+      navigate("/generateNFT");
+    }
   };
 
   return (
     <div className=" flex justify-center items-center h-screen">
       <div className=" w-1/2">
-        <img src={AIimg} alt="" className=" w-96 m-auto mb-8" />
+        <img src={AIimg} alt="" className="img-shadow w-96 m-auto mb-8" />
 
         <form onSubmit={handleOnSubmit} className="flex gap-2">
           <input
@@ -27,7 +31,7 @@ export default function StableDiffusionAPI() {
             value={text}
             placeholder="Enter your Stable Diffusion API key here"
             className="gradient-outline rounded-md bg-neutral-700 bg-opacity-80 p-2 w-full"
-            onChange={(e) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setText(e.target.value);
             }}
           />

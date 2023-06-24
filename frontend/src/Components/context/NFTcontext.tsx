@@ -1,5 +1,4 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
-import axios from "axios";
+import { createContext, useState, ReactNode } from "react";
 
 type ProviderProps = {
   children: ReactNode;

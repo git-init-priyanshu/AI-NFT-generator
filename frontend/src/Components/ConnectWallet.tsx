@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from "react";
-// import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
 
 import { NFTcontext } from "./context/NFTcontext";
@@ -8,7 +7,6 @@ import metamask from "../assets/MetaMask_Fox.svg.png";
 
 export default function SaveNftToMetamask() {
   const { setAccount } = useContext(NFTcontext);
-  // const { setAccount } = useContext(NFTcontext);
 
   const [hasProvider, setHasProvider] = useState<boolean | null>(null);
   const initialState = { accounts: ["none"], balance: "", chainId: "" };
@@ -90,17 +88,11 @@ export default function SaveNftToMetamask() {
 
   return (
     <div className=" flex justify-between items-center h-16">
-      {/* {window.ethereum?.isMetaMask && wallet.accounts.length < 1 && (
-        <button disabled={disableConnect} onClick={connectWallet}>
-          Connect MetaMask
-        </button>
-      )} */}
       <div>AI NFT Generator</div>
 
       {wallet.accounts.length > 0 && (
         <div className="rounded-md bg-neutral-700 bg-opacity-80 p-2 ">
           {wallet.accounts[0] !== "none" ? wallet.accounts[0] : "Account: none"}
-          {/* Account: {wallet.accounts[0]} */}
         </div>
       )}
 

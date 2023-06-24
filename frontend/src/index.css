@@ -11,6 +11,10 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+.img-shadow {
+  box-shadow: 0 0 20px 20px rgba(0, 0, 0, 1);
+}
+
 .circle {
   height: 30px;
   width: 30px;

@@ -1,9 +1,8 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { ethers } from "ethers";
 
 import abi from "../contract/contract_abi.json";
-// import { NFTcontext } from "./context/NFTcontext";
 
 const contractAddress = "0xF05CdcC75b9264a5B0e3F4D53ce837Fe0327077F";
 
@@ -83,7 +82,7 @@ const SaveNFT = ({ image }: saveProps) => {
         onClick={saveToIpfs}
         className=" mx-2 rounded-md bg-neutral-700 p-2 hover:bg-neutral-800 bg-opacity-80 hover:bg-opacity-75"
       >
-        Save NFT
+        Save generated image as NFT
       </button>
     </>
   );

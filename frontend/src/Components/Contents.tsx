@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Image from "./Image";
 import SaveNFT from "./SaveNFT";
 import { NFTcontext } from "./context/NFTcontext";
@@ -7,10 +7,11 @@ export default function InputPrompt() {
   const [image, setImage] = useState<string[]>([]);
   const [prompt, setPrompt] = useState<string>("");
 
-  const { APIkey } = useContext(NFTcontext);
+  // const { APIkey } = useContext(NFTcontext);
 
-  const fetchApi = async (e) => {
+  const fetchApi = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
+    const APIkey = sessionStorage.getItem("api-key");
     try {
       const response = await fetch("http://localhost:5000/api/getImage", {
         method: "POST",
@@ -49,7 +50,7 @@ export default function InputPrompt() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder=" Enter your prompt"
-            className="outline-none rounded-md bg-neutral-700 bg-opacity-80 p-2 w-max"
+            className="outline-none rounded-md bg-neutral-700 bg-opacity-80 p-2 w-full"
           />
           <button
             type="submit"
