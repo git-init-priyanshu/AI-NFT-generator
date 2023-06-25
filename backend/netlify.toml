@@ -1,6 +1,6 @@
 [functions]
   external_node_modules = ["express"]
-  node_bundler = "esbuild"
+  node_bundler = "CommonJS"
 [[redirects]]
   force = true
   from = "/api/*"
