@@ -24,7 +24,7 @@ const SaveNFT = ({ image }: saveProps) => {
     const fetchData = async () => {
       const config = {
         method: "get",
-        url: "http://localhost:5000/api/getdata",
+        url: "https://ai-nft-generator.netlify.app/api/getdata",
         headers: {
           "Content-Type": "application/json",
         },
@@ -39,16 +39,19 @@ const SaveNFT = ({ image }: saveProps) => {
   const saveToIpfs = async () => {
     // Store image to IPFS(Pinata)
     try {
-      const response = await fetch("http://localhost:5000/api/saveImg", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          // Request payload
-          imgURL: image[0],
-        }),
-      });
+      const response = await fetch(
+        "https://ai-nft-generator.netlify.app/api/saveImg",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // Request payload
+            imgURL: image[0],
+          }),
+        }
+      );
       const data = await response.json();
       console.log(data.token_URI);
 

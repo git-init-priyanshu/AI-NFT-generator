@@ -10,17 +10,20 @@ export default function InputPrompt() {
     e.preventDefault();
     const APIkey = sessionStorage.getItem("api-key");
     try {
-      const response = await fetch("http://localhost:5000/api/getImage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          // Request payload
-          key: APIkey,
-          prompt: prompt,
-        }),
-      });
+      const response = await fetch(
+        "https://ai-nft-generator.netlify.app/api/getImage",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            // Request payload
+            key: APIkey,
+            prompt: prompt,
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch image");
       }
