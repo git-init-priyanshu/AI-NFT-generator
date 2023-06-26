@@ -12,7 +12,7 @@ Here's how it works:
 * Click on the "Save generated image as NFT" button to mint the NFT and store it in your wallet.
 
 ## Website link
-[https://fundraiserdapp.netlify.app/](https://ai-nft-generator.netlify.app/)
+[https://ai-nft-generator.netlify.app/](https://ai-nft-generator.netlify.app/)
 
 ## Screenshots
 ![image](https://github.com/git-init-priyanshu/AI-NFT-generator/assets/110045644/7e8f63b5-cd5e-4d6e-8e16-9d528ca507e8)
