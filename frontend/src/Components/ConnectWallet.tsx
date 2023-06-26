@@ -3,7 +3,9 @@ import detectEthereumProvider from "@metamask/detect-provider";
 
 import { NFTcontext } from "./context/NFTcontext";
 import { formatBalance, formatChainAsNum } from "../contract/utils/util.tsx";
+
 import metamask from "../assets/MetaMask_Fox.svg.png";
+import icon from "../assets/icons8-old-vmware-logo.svg";
 
 export default function SaveNftToMetamask() {
   const { setAccount } = useContext(NFTcontext);
@@ -82,7 +84,10 @@ export default function SaveNftToMetamask() {
 
   return (
     <div className=" flex justify-between items-center h-16">
-      <div>AI NFT Generator</div>
+      <div className=" flex items-center gap-3">
+        <img src={icon} alt="" className=" h-10" />
+        <h1>AI NFT Generator</h1>
+      </div>
 
       {wallet.accounts.length > 0 && (
         <div className="rounded-md bg-neutral-700 bg-opacity-80 p-2 ">
