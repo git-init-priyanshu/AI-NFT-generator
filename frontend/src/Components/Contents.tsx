@@ -11,7 +11,7 @@ export default function InputPrompt() {
     const APIkey = sessionStorage.getItem("api-key");
     try {
       const response = await fetch(
-        "https://ai-nft-generator.netlify.app/api/getImage",
+        "https://ai-nft-generator-backend.onrender.com/api/getImage",
         {
           method: "POST",
           headers: {
