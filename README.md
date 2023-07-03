@@ -1,4 +1,5 @@
 # AI NFT Generator
+Please ignore the UI 🫠
 This project empowers users to effortlessly mint their very own AI-generated NFTs, leveraging the powerful Stable Diffusion API. Unlock the potential of AI artistry and start minting your unique NFTs today.
 
 Here's how it works:
