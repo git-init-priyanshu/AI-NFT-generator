@@ -20,21 +20,21 @@ const SaveNFT = ({ image }: saveProps) => {
 
   // Connecting to deployed Contract
   // Getting Quicknode HTTP provider URL and Metamask Private key from backend
-  useEffect(() => {
-    const fetchData = async () => {
-      const config = {
-        method: "get",
-        url: "https://ai-nft-generator-backend.onrender.com/api/getdata",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      const response = await axios(config);
-      const data: data = response.data;
-      setData(data);
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const config = {
+  //       method: "get",
+  //       url: "https://ai-nft-generator-backend.onrender.com/api/getdata",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     };
+  //     const response = await axios(config);
+  //     const data: data = response.data;
+  //     setData(data);
+  //   };
+  //   fetchData();
+  // }, []);
 
   const saveToIpfs = async () => {
     // Store image to IPFS(Pinata)
@@ -63,11 +63,10 @@ const SaveNFT = ({ image }: saveProps) => {
 
   const mintNFT = async (URI: string) => {
     // Getting provider
-    const providerURL =
-      "https://sparkling-thrumming-meme.matic-testnet.discover.quiknode.pro/1c377d190c3a329a0c796f579b19945abc9a1d16/";
+    const providerURL = process.env.QUICKNODE_URI;
     const provider = ethers.getDefaultProvider(providerURL);
     // Metamask private key
-    const privateKey = data.private_key;
+    const privateKey = process.env.PRIVATE_KEY;
     // Getting signer
     const signer = new ethers.Wallet(privateKey, provider);
 

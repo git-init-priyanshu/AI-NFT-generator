@@ -1,19 +1,21 @@
-const express = require("express");
+const { ApolloServer } = require("apollo-server-express");
 
-const port = 5000;
+const express = require("express");
+const cors = require("cors");
+
+const { typeDefs } = require("./schema/typeDefs");
+const { resolvers } = require("./schema/resolvers");
 
 const app = express();
 
 app.use(express.json());
-
-const cors = require("cors");
 app.use(cors());
 
-// Available Routes
-app.use("/api", require("./routes/getImage_StableDiffusion"));
-app.use("/api", require("./routes/storeToIpfs_Pinata"));
-app.use("/api", require("./routes/getData"));
-
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+const server = new ApolloServer({ typeDefs, resolvers });
+server.start().then(() => {
+  server.applyMiddleware({ app });
 });
+
+app.listen({ port: 4000 }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+);
