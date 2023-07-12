@@ -3,6 +3,28 @@ const axiosRetry = require("axios-retry");
 const FormData = require("form-data");
 require("dotenv").config();
 
+const fetchingQueuedImage = async (key, request_id) => {
+  var raw = JSON.stringify({
+    key: key,
+    request_id: request_id,
+  });
+
+  var requestOptions = {
+    method: "POST",
+    url: "https://stablediffusionapi.com/api/v4/dreambooth/fetch",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: raw,
+    redirect: "follow",
+  };
+
+  const response = await axios(requestOptions);
+  console.log(response.data);
+
+  return response.data;
+};
+
 const uploadImage = (sourceUrl) => {
   return new Promise(async (resolve, reject) => {
     const axiosInstance = axios.create();
@@ -96,7 +118,14 @@ const resolvers = {
 
         const response = await axios(options);
         console.log(response.data);
-        return response.data;
+
+        if (response.data.status === "success") {
+          return response.data;
+        } else if (response.data.status === "processing") {
+          await fetchingQueuedImage(args.key, response.data.request_id);
+        } else {
+          return response.data;
+        }
       } catch (error) {
         console.log(error);
       }

@@ -4,12 +4,19 @@ const typeDefs = `#graphql
         status: Status
         generationTime: Float!
         id: ID
-        output: [String!]!
+        output: [String]!
         meta: Meta
     }
-    type URL{
-        url: String
-    }   
+    type fetchedOutput{
+        status: Status
+        id: ID
+        output: [String]!
+    }
+    type error{
+        status: Status
+        message: String!
+    }
+ 
     type Meta{
         H: Int,
         W: Int,
@@ -29,6 +36,8 @@ const typeDefs = `#graphql
     }
     enum Status{
         success
+        processing
+        error
     }
     enum Safetychecker{
         yes
@@ -40,8 +49,10 @@ const typeDefs = `#graphql
         token_URI: String!
     }
 
+    union Output = stableDiffusionOutput | fetchedOutput | error
+
     type Query{
-        getImage(key: String!,prompt: String!): stableDiffusionOutput
+        getImage(key: String!,prompt: String!): Output
         uploadToPinata(url: String!): uploadToPinataOutput!
     }
 `;
