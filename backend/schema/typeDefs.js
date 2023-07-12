@@ -1,6 +1,6 @@
 const typeDefs = `#graphql
     #Stable Diffusion
-    type stableDiffusionOutput{
+    type successOutput{
         status: Status
         generationTime: Float!
         id: ID
@@ -11,6 +11,10 @@ const typeDefs = `#graphql
         status: Status
         id: ID
         output: [String]!
+    }
+    type processingOutput{
+        status: Status
+        message: String!
     }
     type error{
         status: Status
@@ -49,7 +53,7 @@ const typeDefs = `#graphql
         token_URI: String!
     }
 
-    union Output = stableDiffusionOutput | fetchedOutput | error
+    union Output = successOutput | fetchedOutput | processingOutput | error
 
     type Query{
         getImage(key: String!,prompt: String!): Output

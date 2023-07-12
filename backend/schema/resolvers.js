@@ -4,25 +4,37 @@ const FormData = require("form-data");
 require("dotenv").config();
 
 const fetchingQueuedImage = async (key, request_id) => {
-  var raw = JSON.stringify({
-    key: key,
-    request_id: request_id,
+  return new Promise(async (resolve, reject) => {
+    var raw = JSON.stringify({
+      key: key,
+      request_id: request_id,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      url: "https://stablediffusionapi.com/api/v4/dreambooth/fetch",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: raw,
+      redirect: "follow",
+    };
+
+    try {
+      const res = await axios(requestOptions);
+      console.log(res.data);
+      if (res.data.status === "success") {
+        resolve(res.data); // Resolve the promise with the desired value
+      } else if (res.data.status === "processing") {
+        // Calling the function until the processing is done
+        setTimeout(async () => {
+          await fetchingQueuedImage(key, request_id);
+        }, 5000);
+      }
+    } catch (error) {
+      reject(error); // Reject the promise with the error
+    }
   });
-
-  var requestOptions = {
-    method: "POST",
-    url: "https://stablediffusionapi.com/api/v4/dreambooth/fetch",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: raw,
-    redirect: "follow",
-  };
-
-  const response = await axios(requestOptions);
-  console.log(response.data);
-
-  return response.data;
 };
 
 const uploadImage = (sourceUrl) => {
@@ -85,6 +97,21 @@ const uploadMetadata = async (url) => {
 };
 
 const resolvers = {
+  Output: {
+    __resolveType: (obj) => {
+      if (obj.status === "success") {
+        return "successOutput";
+      }
+      if (obj.status === "processing") {
+        return "processingOutput";
+      }
+      if (obj.status === "error") {
+        return "error";
+      }
+      return null;
+    },
+  },
+
   Query: {
     // StableDiffusion Resolver
     getImage: async (parent, args) => {
@@ -122,7 +149,15 @@ const resolvers = {
         if (response.data.status === "success") {
           return response.data;
         } else if (response.data.status === "processing") {
-          await fetchingQueuedImage(args.key, response.data.request_id);
+          // const res = await fetchingQueuedImage(
+          //   args.key,
+          //   response.data.request_id
+          // );
+          const res = {
+            status: "processing",
+            message: "API call is taking too long to respond",
+          };
+          return res;
         } else {
           return response.data;
         }
