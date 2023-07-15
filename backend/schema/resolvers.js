@@ -97,7 +97,7 @@ const uploadMetadata = async (url) => {
 };
 
 const resolvers = {
-  Output: {
+  StableDiffusionOutput: {
     __resolveType: (obj) => {
       if (obj.status === "success") {
         return "successOutput";
@@ -165,6 +165,7 @@ const resolvers = {
         console.log(error);
       }
     },
+
     // Upload to Pinata resolver
     uploadToPinata: async (parent, args) => {
       const response = await uploadImage(args.url);

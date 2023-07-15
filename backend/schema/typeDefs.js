@@ -49,15 +49,15 @@ const typeDefs = `#graphql
     }
 
     #Upload to Pinata
-    type uploadToPinataOutput{
+    type PinataOutput{
         token_URI: String!
     }
 
-    union Output = successOutput | fetchedOutput | processingOutput | error
+    union StableDiffusionOutput = successOutput | fetchedOutput | processingOutput | error
 
     type Query{
-        getImage(key: String!,prompt: String!): Output
-        uploadToPinata(url: String!): uploadToPinataOutput!
+        getImage(key: String!,prompt: String!): StableDiffusionOutput
+        uploadToPinata(url: String!): PinataOutput!
     }
 `;
 

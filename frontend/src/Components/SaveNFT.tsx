@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
+// import axios from "axios";
 import { ethers } from "ethers";
 
 import abi from "../contract/contract_abi.json";
@@ -15,7 +15,7 @@ type data = {
 };
 
 const SaveNFT = ({ image }: saveProps) => {
-  const [data, setData] = useState<data | null>(null);
+  // const [data, setData] = useState<data | null>(null);
   // const [URI, setURI] = useState<string | null>(null);
 
   // Connecting to deployed Contract

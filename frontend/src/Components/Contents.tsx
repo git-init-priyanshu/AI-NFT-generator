@@ -11,7 +11,7 @@ export default function InputPrompt() {
   const [image, setImage] = useState<string | null>(null);
   const [prompt, setPrompt] = useState<string>("");
 
-  const [getData, { loading, data, error }] = useLazyQuery(GET_IMAGE_QUERY);
+  const [getData, { data }] = useLazyQuery(GET_IMAGE_QUERY);
 
   const fetchApi = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
