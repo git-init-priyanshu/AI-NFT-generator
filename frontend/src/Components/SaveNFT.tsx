@@ -7,7 +7,7 @@ import abi from "../contract/contract_abi.json";
 const contractAddress = "0xF05CdcC75b9264a5B0e3F4D53ce837Fe0327077F";
 
 type saveProps = {
-  image: string[];
+  image: string;
 };
 type data = {
   provider_url: string;

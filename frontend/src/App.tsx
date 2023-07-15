@@ -28,7 +28,7 @@ const App = () => {
   // Defining Apollo Client
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    uri: "http://localhost:4000/",
+    uri: "http://localhost:4000/graphql",
   });
 
   return (
@@ -44,11 +44,9 @@ const App = () => {
 
 function Root() {
   return (
-    <>
-      <div>
-        <Outlet />
-      </div>
-    </>
+    <div>
+      <Outlet />
+    </div>
   );
 }
 
