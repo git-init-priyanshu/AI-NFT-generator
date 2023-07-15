@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 // import axios from "axios";
 import { ethers } from "ethers";
 
@@ -9,10 +9,10 @@ const contractAddress = "0xF05CdcC75b9264a5B0e3F4D53ce837Fe0327077F";
 type saveProps = {
   image: string;
 };
-type data = {
-  provider_url: string;
-  private_key: string;
-};
+// type data = {
+//   provider_url: string;
+//   private_key: string;
+// };
 
 const SaveNFT = ({ image }: saveProps) => {
   // const [data, setData] = useState<data | null>(null);
