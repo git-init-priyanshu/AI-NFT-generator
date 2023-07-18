@@ -5,19 +5,21 @@ import { Toaster, toast } from "react-hot-toast";
 import GET_IMAGE_QUERY from "../Queries/getImage";
 import Image from "./Image";
 import SaveNFT from "./SaveNFT";
-// import { toast } from "react-hot-toast/headless";
 
 export default function InputPrompt() {
-  const [image, setImage] = useState<string | null>(null);
+  const [imgState, setImgState] = useState<string | null>(null);
+  console.log(imgState);
   const [prompt, setPrompt] = useState<string>("");
 
-  const [getData, { data }] = useLazyQuery(GET_IMAGE_QUERY);
+  const [getData, { data: imgData }] = useLazyQuery(GET_IMAGE_QUERY);
 
-  const fetchApi = async (e: React.FormEvent<HTMLElement>) => {
+  const getImage = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
+
     const APIkey = sessionStorage.getItem("api-key");
-    try {
-      toast.promise(
+
+    toast
+      .promise(
         getData({
           variables: {
             key: APIkey,
@@ -26,29 +28,23 @@ export default function InputPrompt() {
         }),
         {
           loading: "Generating Image...",
-          success: <b>Success</b>,
-          error: <b>Failed</b>,
+          success: null,
+          error: null,
         }
-      );
-    } catch (error) {
-      console.error(error);
-    }
+      )
+      .then(() => {
+        console.log(imgData);
+        const data = imgData.getImage;
+
+        if (data.status === "success" && imgState !== data.output[0]) {
+          setImgState(data.output[0]);
+          toast.success("Success");
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((err) => console.log(err));
   };
-  if (data) {
-    if (
-      data.getImage.status === "success" &&
-      image !== data.getImage.output[0]
-    ) {
-      console.log(data.getImage.status);
-      setImage(data.getImage.output[0]);
-    } else if (data.getImage.status === "processing") {
-      console.log(data.getImage.status);
-      toast.error(data.getImage.message);
-    } else if (data.getImage.status === "error") {
-      console.log(data.getImage.status);
-      toast.error(data.getImage.message);
-    }
-  }
 
   return (
     <div className=" flex w-full">
@@ -56,10 +52,10 @@ export default function InputPrompt() {
         <Toaster position="bottom-right" reverseOrder={false} />
       </div>
       <div className=" w-1/2 h-calc">
-        <Image image={image} />
+        <Image image={imgState} />
 
         <form
-          onSubmit={fetchApi}
+          onSubmit={getImage}
           className=" h-16 mt-2 w-full flex items-start"
         >
           <input
@@ -79,7 +75,7 @@ export default function InputPrompt() {
         </form>
       </div>
       <div className=" w-1/2 h-calc">
-        <SaveNFT image={image} />
+        <SaveNFT image={imgState} />
       </div>
     </div>
   );
