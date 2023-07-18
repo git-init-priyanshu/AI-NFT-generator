@@ -34,14 +34,14 @@ export default function InputPrompt() {
       )
       .then(() => {
         console.log(imgData);
-        // const data = imgData.getImage;
+        const data = imgData.getImage;
 
-        // if (data.status === "success" && imgState !== data.output[0]) {
-        //   setImgState(data.output[0]);
-        //   toast.success("Success");
-        // } else {
-        //   toast.error(data.message);
-        // }
+        if (data.status === "success" && imgState !== data.output[0]) {
+          setImgState(data.output[0]);
+          toast.success("Success");
+        } else {
+          toast.error(data.message);
+        }
       })
       .catch((err) => console.log(err));
   };

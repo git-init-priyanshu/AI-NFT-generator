@@ -16,13 +16,11 @@ const SaveNFT = ({ image }: saveProps) => {
 
   const saveToIpfs = async () => {
     // Store image to IPFS(Pinata)
-    const img =
-      "https://cdn.stablediffusionapi.com/generations/dc45b4b2-6ccd-411d-964d-9534ff0e3298-0.png";
     toast
       .promise(
         uploadToPinata({
           variables: {
-            url: img,
+            url: image,
           },
         }),
         {
@@ -33,7 +31,7 @@ const SaveNFT = ({ image }: saveProps) => {
       )
       .then(() => {
         console.log(data);
-        // mintNFT(data.uploadToPinata.token_URI)
+        mintNFT(data.uploadToPinata.token_URI);
       })
       .catch((err) => console.log(err));
   };
