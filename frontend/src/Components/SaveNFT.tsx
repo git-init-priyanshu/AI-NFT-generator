@@ -1,7 +1,8 @@
-// import { useState } from "react";
-// import axios from "axios";
 import { ethers } from "ethers";
+import { useLazyQuery } from "@apollo/client";
+import { Toaster, toast } from "react-hot-toast";
 
+import UPLOAD_TO_PINATA_QUERY from "../Queries/uploadToPinata";
 import abi from "../contract/contract_abi.json";
 
 const contractAddress = "0xF05CdcC75b9264a5B0e3F4D53ce837Fe0327077F";
@@ -9,56 +10,32 @@ const contractAddress = "0xF05CdcC75b9264a5B0e3F4D53ce837Fe0327077F";
 type saveProps = {
   image: string;
 };
-// type data = {
-//   provider_url: string;
-//   private_key: string;
-// };
 
 const SaveNFT = ({ image }: saveProps) => {
-  // const [data, setData] = useState<data | null>(null);
-  // const [URI, setURI] = useState<string | null>(null);
-
-  // Connecting to deployed Contract
-  // Getting Quicknode HTTP provider URL and Metamask Private key from backend
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const config = {
-  //       method: "get",
-  //       url: "https://ai-nft-generator-backend.onrender.com/api/getdata",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     };
-  //     const response = await axios(config);
-  //     const data: data = response.data;
-  //     setData(data);
-  //   };
-  //   fetchData();
-  // }, []);
+  const [uploadToPinata, { data }] = useLazyQuery(UPLOAD_TO_PINATA_QUERY);
 
   const saveToIpfs = async () => {
     // Store image to IPFS(Pinata)
-    try {
-      const response = await fetch(
-        "https://ai-nft-generator-backend.onrender.com/api/saveImg",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+    const img =
+      "https://cdn.stablediffusionapi.com/generations/dc45b4b2-6ccd-411d-964d-9534ff0e3298-0.png";
+    toast
+      .promise(
+        uploadToPinata({
+          variables: {
+            url: img,
           },
-          body: JSON.stringify({
-            // Request payload
-            imgURL: image[0],
-          }),
+        }),
+        {
+          loading: "Uploading Image...",
+          success: <b>Successfully Uploaded</b>,
+          error: <b>Failed</b>,
         }
-      );
-      const data = await response.json();
-      console.log(data.token_URI);
-
-      data && mintNFT(data.token_URI);
-    } catch (error) {
-      console.log(error);
-    }
+      )
+      .then(() => {
+        console.log(data);
+        // mintNFT(data.uploadToPinata.token_URI)
+      })
+      .catch((err) => console.log(err));
   };
 
   const mintNFT = async (URI: string) => {
@@ -80,6 +57,9 @@ const SaveNFT = ({ image }: saveProps) => {
 
   return (
     <>
+      <div>
+        <Toaster position="bottom-right" reverseOrder={false} />
+      </div>
       <button
         onClick={saveToIpfs}
         className=" mx-2 rounded-md bg-neutral-700 p-2 hover:bg-neutral-800 bg-opacity-80 hover:bg-opacity-75"
