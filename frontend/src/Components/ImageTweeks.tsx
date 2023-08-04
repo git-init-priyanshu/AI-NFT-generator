@@ -4,7 +4,7 @@ const ImageTweeks = () => {
   const [height, setHeight] = useState<number>(512);
   const [width, setWidth] = useState<number>(512);
   const [samples, setSamples] = useState<number>(1);
-  const [isToggled, setIsToggled] = useState<boolean>(false);
+  // const [isToggled, setIsToggled] = useState<boolean>(false);
 
   return (
     <>

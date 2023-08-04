@@ -5,7 +5,7 @@ import { Toaster, toast } from "react-hot-toast";
 import GET_IMAGE_QUERY from "../Queries/getImage";
 import Image from "./Image";
 import SaveNFT from "./SaveNFT";
-import ImageTweeks from "./ImageTweeks";
+// import ImageTweeks from "./ImageTweeks";
 
 export default function InputPrompt() {
   const [imgState, setImgState] = useState<string | null>(null);
