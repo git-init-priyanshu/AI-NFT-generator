@@ -83,14 +83,14 @@ export default function SaveNftToMetamask() {
   const disableConnect = Boolean(wallet) && isConnecting;
 
   return (
-    <div className=" flex justify-between items-center h-16">
+    <div className=" relative flex justify-between items-center h-16">
       <div className=" flex items-center gap-3">
         <img src={icon} alt="" className=" h-10" />
         <h1>AI NFT Generator</h1>
       </div>
 
       {wallet.accounts.length > 0 && (
-        <div className="rounded-md bg-neutral-700 bg-opacity-80 p-2 ">
+        <div className="account bg-neutral-700 bg-opacity-80 p-2 sm: top-16 lg: rounded-md  ">
           {wallet.accounts[0] !== "none" ? wallet.accounts[0] : "Account: none"}
         </div>
       )}
@@ -101,7 +101,7 @@ export default function SaveNftToMetamask() {
             <div className="rounded-md bg-neutral-700 bg-opacity-80 p-2 flex items-center rounded-r-none border-r border-neutral-500 ">
               {wallet.balance} MATIC
             </div>
-            <div className=" bg-neutral-700 bg-opacity-80 p-2 flex items-center border-r border-neutral-500">
+            <div className="display bg-neutral-700 bg-opacity-80 p-2 flex items-center border-r border-neutral-500">
               ChainId: {formatChainAsNum(wallet.chainId)}
             </div>
 

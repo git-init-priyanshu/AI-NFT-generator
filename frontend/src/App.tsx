@@ -32,7 +32,7 @@ const App = () => {
   });
 
   return (
-    <div className=" h-screen mx-10">
+    <div className="h-screen sm: mx-2 lg:  mx-10 ">
       <ApolloProvider client={client}>
         <NFTprovider>
           <RouterProvider router={router} />

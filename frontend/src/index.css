@@ -61,6 +61,14 @@ body {
 .h-calc {
   height: calc(100vh - 8.5rem);
 }
+@media (max-width: 640px) {
+  .h-calc {
+    height: auto;
+  }
+  .h-calc-img {
+    height: calc(70vh - 8.5rem);
+  }
+}
 
 .slider:before {
   position: absolute;
@@ -85,4 +93,22 @@ input:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
+}
+
+@media (max-width: 640px) {
+  .account {
+    position: absolute;
+    margin: auto;
+    left: 50%;
+    transform: translate(-50%);
+  }
+  .display {
+    display: none;
+  }
+  .button {
+    width: 100%;
+  }
+  .button button {
+    margin-top: 60px;
+  }
 }

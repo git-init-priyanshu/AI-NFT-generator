@@ -44,11 +44,11 @@ export default function InputPrompt() {
   }
 
   return (
-    <div className=" flex w-full">
+    <div className=" flex w-full sm: flex-col lg:flex-row">
       <div>
         <Toaster position="bottom-right" reverseOrder={false} />
       </div>
-      <div className=" w-1/2 h-calc">
+      <div className="h-calc h-calc-img sm: w-full mt-12 lg:mt-0 w-1/2 ">
         {imgData && imgData.getImage.status === "success" ? (
           <Image image={imgData.getImage.output[0]} />
         ) : (
@@ -78,8 +78,8 @@ export default function InputPrompt() {
         </form>
       </div>
 
-      <div className=" w-1/2 h-calc">
-        <ImageTweeks />
+      <div className="button h-calc sm:m-16  lg:mt-0 w-1/2">
+        {/* <ImageTweeks /> */}
         <SaveNFT image={imgState} />
       </div>
     </div>
