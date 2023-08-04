@@ -21,11 +21,14 @@ export default function StableDiffusionAPI() {
   };
 
   return (
-    <div className=" flex justify-center items-center h-screen">
-      <div className=" w-1/2">
+    <div className=" flex justify-center items-center h-screen sm: w-full lg:">
+      <div className="sm: w-80 lg: w-1/2 ">
         <img src={AIimg} alt="" className="img-shadow w-96 m-auto mb-8" />
 
-        <form onSubmit={handleOnSubmit} className="flex gap-2">
+        <form
+          onSubmit={handleOnSubmit}
+          className=" flex sm: flex-col  lg:flex-row gap-2"
+        >
           <input
             type="text"
             value={text}
@@ -43,6 +46,7 @@ export default function StableDiffusionAPI() {
             Submit
           </button>
         </form>
+        <p className=" text-center my-2 text-gray-300">Get your Stable Diffusion's API key <a className=" text-blue-400" target="_blank" href="https://stablediffusionapi.com/settings/api"> here</a></p>
       </div>
     </div>
   );

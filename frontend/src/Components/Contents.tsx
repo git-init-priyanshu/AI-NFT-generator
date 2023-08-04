@@ -5,6 +5,7 @@ import { Toaster, toast } from "react-hot-toast";
 import GET_IMAGE_QUERY from "../Queries/getImage";
 import Image from "./Image";
 import SaveNFT from "./SaveNFT";
+// import ImageTweeks from "./ImageTweeks";
 
 export default function InputPrompt() {
   const [imgState, setImgState] = useState<string | null>(null);
@@ -28,31 +29,31 @@ export default function InputPrompt() {
         }),
         {
           loading: "Generating Image...",
-          success: null,
-          error: null,
+          success: "Success",
+          error: "Some Error occured",
+          /**
+           * have to write code to handel error in backend
+           * So that react toast displays the information correctly
+           */
         }
       )
-      .then(() => {
-        console.log(imgData);
-        const data = imgData.getImage;
-
-        if (data.status === "success" && imgState !== data.output[0]) {
-          setImgState(data.output[0]);
-          toast.success("Success");
-        } else {
-          toast.error(data.message);
-        }
-      })
       .catch((err) => console.log(err));
   };
+  if (imgData) {
+    setImgState(imgData.getImage.output[0]);
+  }
 
   return (
-    <div className=" flex w-full">
+    <div className=" flex w-full sm: flex-col lg:flex-row">
       <div>
         <Toaster position="bottom-right" reverseOrder={false} />
       </div>
-      <div className=" w-1/2 h-calc">
-        <Image image={imgState} />
+      <div className="h-calc h-calc-img sm: w-full mt-12 lg:mt-0 w-1/2 ">
+        {imgData && imgData.getImage.status === "success" ? (
+          <Image image={imgData.getImage.output[0]} />
+        ) : (
+          <Image image={null} />
+        )}
 
         <form
           onSubmit={getImage}
@@ -62,7 +63,9 @@ export default function InputPrompt() {
             type="text"
             id="prompt"
             value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPrompt(e.target.value)
+            }
             placeholder=" Enter your prompt"
             className="outline-none rounded-md bg-neutral-700 bg-opacity-80 p-2 w-full"
           />
@@ -74,7 +77,9 @@ export default function InputPrompt() {
           </button>
         </form>
       </div>
-      <div className=" w-1/2 h-calc">
+
+      <div className="button h-calc sm:m-16  lg:mt-0 w-1/2">
+        {/* <ImageTweeks /> */}
         <SaveNFT image={imgState} />
       </div>
     </div>

@@ -60,7 +60,7 @@ const SaveNFT = ({ image }: saveProps) => {
       </div>
       <button
         onClick={saveToIpfs}
-        className=" mx-2 rounded-md bg-neutral-700 p-2 hover:bg-neutral-800 bg-opacity-80 hover:bg-opacity-75"
+        className="rounded-md bg-neutral-700 p-2 hover:bg-neutral-800 bg-opacity-80 hover:bg-opacity-75 sm:mx-0 sm: w-full  lg:mx-2 w-auto "
       >
         Save generated image as NFT
       </button>
