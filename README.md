@@ -2,6 +2,13 @@
 Please ignore the UI 🫠
 This project empowers users to effortlessly mint their very own AI-generated NFTs, leveraging the powerful Stable Diffusion API. Unlock the potential of AI artistry and start minting your unique NFTs today.
 
+Tech Stack:
+* React.js
+* Tailwind CSS
+* GraphQL
+* ether.js
+* Solidity
+
 ## Website link
 [https://ai-nft-generator.netlify.app/](https://ai-nft-generator.netlify.app/)
 
