@@ -28,8 +28,8 @@ const App = () => {
   // Defining Apollo Client
   const client = new ApolloClient({
     cache: new InMemoryCache(),
-    uri: "https://ai-nft-generator-backend.onrender.com/graphql",
-    // uri: "http://localhost:4000/graphql"
+    uri: "https://ai-nft-generator-backend.onrender.com/graphql", //For Production
+    // uri: "http://localhost:4000/graphql" //For development 
   });
 
   return (
