@@ -29,7 +29,7 @@ export default function InputPrompt() {
         }),
         {
           loading: "Generating Image...",
-          success: "Success",
+          success: `Success${setImgState(imgData.getImage.output[0])}`,
           error: "Some Error occured",
           /**
            * have to write code to handel error in backend
@@ -39,9 +39,6 @@ export default function InputPrompt() {
       )
       .catch((err) => console.log(err));
   };
-  if (imgData) {
-    setImgState(imgData.getImage.output[0]);
-  }
 
   return (
     <div className=" flex w-full sm: flex-col lg:flex-row">
@@ -50,7 +47,7 @@ export default function InputPrompt() {
       </div>
       <div className="h-calc h-calc-img sm: w-full mt-12 lg:mt-0 w-1/2 ">
         {imgData && imgData.getImage.status === "success" ? (
-          <Image image={imgData.getImage.output[0]} />
+          <Image image={imgState} />
         ) : (
           <Image image={null} />
         )}
