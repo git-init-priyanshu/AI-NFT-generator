@@ -9,7 +9,7 @@ import SaveNFT from "./SaveNFT";
 
 export default function InputPrompt() {
   const [imgState, setImgState] = useState<string | null>(null);
-  console.log(imgState);
+
   const [prompt, setPrompt] = useState<string>("");
 
   const [getData, { data: imgData }] = useLazyQuery(GET_IMAGE_QUERY);
@@ -29,7 +29,10 @@ export default function InputPrompt() {
         }),
         {
           loading: "Generating Image...",
-          success: `Success${setImgState(imgData.getImage.output[0])}`,
+          success: (res) => {
+            setImgState(res.data.getImage.output[0]);
+            return "success";
+          },
           error: "Some Error occured",
           /**
            * have to write code to handel error in backend
