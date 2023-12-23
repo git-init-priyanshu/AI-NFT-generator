@@ -17,8 +17,8 @@ import "./App.css";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
-      <Route index element={<StableDiffusionAPI />} />
-      <Route path="/generateNFT" element={<GenerateNFT />} />
+      {/* <Route index element={<StableDiffusionAPI />} /> */}
+      <Route index element={<GenerateNFT />} />
       <Route path="/showMyNFTs" element={<ShowMyNFTs />} />
     </Route>
   )
@@ -33,13 +33,11 @@ const App = () => {
   });
 
   return (
-    <div className="h-screen sm: mx-2 lg:  mx-10 ">
       <ApolloProvider client={client}>
         <NFTprovider>
           <RouterProvider router={router} />
         </NFTprovider>
       </ApolloProvider>
-    </div>
   );
 };
 

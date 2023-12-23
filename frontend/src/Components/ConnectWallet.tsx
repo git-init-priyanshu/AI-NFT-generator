@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect, useContext } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
+import { Typography, Paper, Box, Button, Chip } from "@mui/material";
 
 import { NFTcontext } from "./context/NFTcontext";
 import { formatBalance, formatChainAsNum } from "../contract/utils/util.tsx";
 
 import metamask from "../assets/MetaMask_Fox.svg.png";
-import icon from "../assets/icons8-old-vmware-logo.svg";
+import icon from "../assets/draw_svg20210625-19886-xh0lc.svg.png";
 
 export default function SaveNftToMetamask() {
   const { setAccount } = useContext(NFTcontext);
@@ -74,7 +77,7 @@ export default function SaveNftToMetamask() {
         updateWallet(accounts);
         accounts && setAccount(accounts[0]);
       })
-      .catch((err: any) => {
+      .catch((err: unknown) => {
         console.log(err);
       });
     setIsConnecting(false);
@@ -83,43 +86,95 @@ export default function SaveNftToMetamask() {
   const disableConnect = Boolean(wallet) && isConnecting;
 
   return (
-    <div className=" relative flex justify-between items-center h-16">
-      <div className=" flex items-center gap-3">
-        <img src={icon} alt="" className=" h-10" />
-        <h1>AI NFT Generator</h1>
-      </div>
+    <Paper
+      // variant="outlined"
+      elevation={2}
+      square
+      sx={{
+        // backgroundColor: "gray",
+        paddingX: "1rem",
+        position: "relative",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: "4rem",
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        <img src={icon} alt="" className=" h-12" />
+        <Typography component="h1" sx={{ color: "black" }}>
+          AI NFT Generator
+        </Typography>
+      </Box>
 
       {wallet.accounts.length > 0 && (
-        <div className="account bg-neutral-700 bg-opacity-80 p-2 sm: top-16 lg: rounded-md  ">
-          {wallet.accounts[0] !== "none" ? wallet.accounts[0] : "Account: none"}
-        </div>
+        <Chip
+          sx={{ color: "white", padding: "0.5rem" }}
+          label={
+            wallet.accounts[0] !== "none" ? wallet.accounts[0] : "Account: none"
+          }
+          variant="filled"
+          color="primary"
+        />
       )}
 
-      <div className="flex items-center">
+      <Box sx={{ display: "flex", alignItems: "center" }}>
         {wallet.accounts[0] !== "none" ? (
-          <div className=" flex">
-            <div className="rounded-md bg-neutral-700 bg-opacity-80 p-2 flex items-center rounded-r-none border-r border-neutral-500 ">
+          <Box sx={{ display: "flex" }}>
+            <Box
+              sx={{
+                borderRadius: "0.375rem",
+                display: "flex",
+                padding: "0.5rem",
+                alignItems: "center",
+                borderRightWidth: "1px",
+                borderTopRightRadius: "0px",
+                borderBottomRightRadius: "0px",
+              }}
+            >
               {wallet.balance} MATIC
-            </div>
-            <div className="display bg-neutral-700 bg-opacity-80 p-2 flex items-center border-r border-neutral-500">
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                borderRightWidth: "1px",
+                padding: "0.5rem",
+                alignItems: "center",
+              }}
+              className="display"
+            >
               ChainId: {formatChainAsNum(wallet.chainId)}
-            </div>
+            </Box>
 
-            <div className="rounded-md bg-neutral-700 bg-opacity-80 p-2 flex items-center rounded-l-none hover:cursor-pointer">
-              <div className=" circle"></div>
-            </div>
-          </div>
+            <Box
+              sx={{
+                borderRadius: "0.375rem",
+                display: "flex",
+                padding: "0.5rem",
+                alignItems: "center",
+                borderRightWidth: "1px",
+                borderTopRightRadius: "0px",
+                borderBottomRightRadius: "0px",
+                ":hover": {
+                  cursor: "pointer",
+                },
+              }}
+              // className="hover:cursor-pointer"
+            >
+              <Box className="circle"></Box>
+            </Box>
+          </Box>
         ) : (
-          <button
+          <Button
+            variant="contained"
             disabled={disableConnect}
             onClick={connectWallet}
-            className="flex items-center rounded-md bg-neutral-700 bg-opacity-80 p-2  hover:bg-neutral-800 hover:bg-opacity-75"
           >
             <img src={metamask} className=" w-8 mr-2" />
             Connect
-          </button>
+          </Button>
         )}
-      </div>
-    </div>
+      </Box>
+    </Paper>
   );
 }
