@@ -9,6 +9,8 @@ body {
   padding: 0;
   width: 100%;
   font-family: "Inter", sans-serif;
+  background-color: white !important;
+  background-image: url("assets/paper-texture-background-zlvqcgwohwvd642j.jpg");
 }
 
 .img-shadow {
@@ -23,16 +25,31 @@ body {
 }
 .image {
   background: url("./assets/image_icon.png");
-  background-size: 90%;
+  background-size: 60%;
   background-repeat: no-repeat;
   background-position-x: center;
   background-position-y: center;
   background-color: transparent;
 
-  --tw-bg-opacity: 0.8;
-  background-color: rgb(64 64 64 / var(--tw-bg-opacity));
+  /* --tw-bg-opacity: 0.8;
+  background-color: rgb(64 64 64 / var(--tw-bg-opacity)); */
 }
 
+.gradient-outline {
+  outline: none;
+  color: white;
+}
+
+/* .outline-gradient { */
+/* position: fixed; */
+.gradient-outline {
+  outline: none;
+  color: white;
+}
+
+.outline-gradient {
+  /* position: fixed; */
+}
 .gradient-outline {
   outline: none;
   color: white;
@@ -59,16 +76,16 @@ body {
 }
 
 .h-calc {
-  height: calc(100vh - 8.5rem);
+  height: calc(100vh - 10rem);
 }
-@media (max-width: 640px) {
+/* @media (max-width: 640px) {
   .h-calc {
     height: auto;
   }
   .h-calc-img {
     height: calc(70vh - 8.5rem);
   }
-}
+} */
 
 .slider:before {
   position: absolute;
@@ -101,6 +118,7 @@ input:checked + .slider:before {
     margin: auto;
     left: 50%;
     transform: translate(-50%);
+    top: 4rem;
   }
   .display {
     display: none;

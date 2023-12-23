@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { useLazyQuery } from "@apollo/client";
 import { Toaster, toast } from "react-hot-toast";
+import { Box, Button } from "@mui/material";
 
 import UPLOAD_TO_PINATA_QUERY from "../Queries/uploadToPinata";
 import abi from "../contract/contract_abi.json";
@@ -58,12 +59,13 @@ const SaveNFT = ({ image }: saveProps) => {
       <div>
         <Toaster position="bottom-right" reverseOrder={false} />
       </div>
-      <button
+      <Button
+        disabled={!image}
+        variant="contained"
         onClick={saveToIpfs}
-        className="rounded-md bg-neutral-700 p-2 hover:bg-neutral-800 bg-opacity-80 hover:bg-opacity-75 sm:mx-0 sm: w-full  lg:mx-2 w-auto "
       >
-        Save generated image as NFT
-      </button>
+        Save
+      </Button>
     </>
   );
 };
