@@ -1,5 +1,5 @@
 import { Box, Paper } from "@mui/material";
-import img from "../assets/image_icon.png";
+// import img from "../assets/image_icon.png";
 
 export default function Image(props: { image: string }) {
   return (

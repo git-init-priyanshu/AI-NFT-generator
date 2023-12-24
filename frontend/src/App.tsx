@@ -10,7 +10,7 @@ import {
 import GenerateNFT from "./Pages/GenerateNFT";
 import ShowMyNFTs from "./Pages/ShowMyNFTs";
 import { NFTprovider } from "./Components/context/NFTcontext";
-import StableDiffusionAPI from "./Pages/StableDiff_API";
+// import StableDiffusionAPI from "./Pages/StableDiff_API";
 import "./App.css";
 
 // Defining router

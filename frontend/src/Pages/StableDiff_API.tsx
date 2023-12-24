@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useNavigate, redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import AIimg from "../assets/965.AI processor.jpg";
 import { NFTcontext } from "../Components/context/NFTcontext";
@@ -46,7 +46,17 @@ export default function StableDiffusionAPI() {
             Submit
           </button>
         </form>
-        <p className=" text-center my-2 text-gray-300">Get your Stable Diffusion's API key <a className=" text-blue-400" target="_blank" href="https://stablediffusionapi.com/settings/api"> here</a></p>
+        <p className=" text-center my-2 text-gray-300">
+          Get your Stable Diffusion's API key{" "}
+          <a
+            className=" text-blue-400"
+            target="_blank"
+            href="https://stablediffusionapi.com/settings/api"
+          >
+            {" "}
+            here
+          </a>
+        </p>
       </div>
       {/* <button onClick={()=>navigate("/doc/123")}>dynamic routes</button> */}
     </div>
