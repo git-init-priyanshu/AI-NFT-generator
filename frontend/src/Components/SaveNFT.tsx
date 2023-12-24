@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { useLazyQuery } from "@apollo/client";
 import { Toaster, toast } from "react-hot-toast";
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 
 import UPLOAD_TO_PINATA_QUERY from "../Queries/uploadToPinata";
 import abi from "../contract/contract_abi.json";
@@ -59,11 +59,7 @@ const SaveNFT = ({ image }: saveProps) => {
       <div>
         <Toaster position="bottom-right" reverseOrder={false} />
       </div>
-      <Button
-        disabled={!image}
-        variant="contained"
-        onClick={saveToIpfs}
-      >
+      <Button disabled={!image} variant="contained" onClick={saveToIpfs}>
         Save
       </Button>
     </>
