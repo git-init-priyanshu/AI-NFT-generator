@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect, useContext } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
-import { Typography, Paper, Box, Button, Chip } from "@mui/material";
 
-import { NFTcontext } from "./context/NFTcontext";
+import { NFTcontext } from "@/NFTcontext";
 import { formatBalance, formatChainAsNum } from "../contract/utils/util.tsx";
 
 import metamask from "../assets/MetaMask_Fox.svg.png";
