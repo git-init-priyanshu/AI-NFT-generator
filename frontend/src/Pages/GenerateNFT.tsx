@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { ethers } from "ethers";
+import axios from 'axios';
 import detectEthereumProvider from "@metamask/detect-provider";
 
 import { Input } from "@/components/ui/input"
@@ -8,10 +8,7 @@ import { NFTcontext } from "@/NFTcontext";
 import { useToast } from "@/hooks/use-toast.ts";
 import Navbar from "@/components/navbar"
 
-import abi from "../contract/contract_abi.json";
 import { formatBalance, formatChainAsNum } from "../contract/utils/util.tsx";
-
-const contractAddress = "0xF05CdcC75b9264a5B0e3F4D53ce837Fe0327077F";
 
 export default function CenteredLayout() {
   const { setAccount } = useContext(NFTcontext);
@@ -20,8 +17,9 @@ export default function CenteredLayout() {
   const initialState = { accounts: ["none"], balance: "", chainId: "" };
   const [wallet, setWallet] = useState(initialState);
   const [isConnecting, setIsConnecting] = useState(false);
-  const [imgState, setImgState] = useState<string | null>(null);
   const [prompt, setPrompt] = useState<string>("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [imgState, setImgState] = useState<string | null>(null);
 
   // Connecting to metamask
   useEffect(() => {
@@ -89,85 +87,47 @@ export default function CenteredLayout() {
     setIsConnecting(false);
   };
 
-  const getImage = async (e: React.FormEvent<HTMLElement>) => {
-    e.preventDefault();
-
-    const APIkey =
-      "eDQEK5xVfrT2FdUl8HEwVS6X2MuhB3VASGzsgbnPlmNM6wvb5aJK7WwZxxet";
-
-    // toast
-    //   .promise(
-    //     getData({
-    //       variables: {
-    //         key: APIkey,
-    //         prompt: prompt,
-    //       },
-    //     }),
-    //     {
-    //       loading: "Generating Image...",
-    //       success: (res) => {
-    //         setImgState(res.data.getImage.output[0]);
-    //         return "success";
-    //       },
-    //       error: "Some Error occured",
-    //       /**
-    //        * have to write code to handel error in backend
-    //        * So that react toast displays the information correctly
-    //        */
-    //     }
-    //   )
-    //   .catch((err) => console.log(err));
-  };
-
-  const SaveNFT = ({ image }: saveProps) => {
-    // const [uploadToPinata, { data }] = useLazyQuery(UPLOAD_TO_PINATA_QUERY);
-    //
-    // const saveToIpfs = async () => {
-    //   // Store image to IPFS(Pinata)
-    //   toast
-    //     .promise(
-    //       uploadToPinata({
-    //         variables: {
-    //           url: image,
-    //         },
-    //       }),
-    //       {
-    //         loading: "Uploading Image...",
-    //         success: <b>Successfully Uploaded</b>,
-    //         error: <b>Failed</b>,
-    //       }
-    //     )
-    //     .then(() => {
-    //       console.log(data);
-    //       mintNFT(data.uploadToPinata.token_URI);
-    //     })
-    //     .catch((err) => console.log(err));
-    // };
-    //
-    // const mintNFT = async (URI: string) => {
-    //   // Getting provider
-    //   const providerURL = process.env.QUICKNODE_URI;
-    //   const provider = ethers.getDefaultProvider(providerURL);
-    //   // Metamask private key
-    //   const privateKey = process.env.PRIVATE_KEY;
-    //   // Getting signer
-    //   const signer = new ethers.Wallet(privateKey, provider);
-    //
-    //   // Getting the deployed contract
-    //   const contract = new ethers.Contract(contractAddress, abi, signer);
-    //
-    //   console.log(URI);
-    //   const mintNFT = URI && (await contract.awardItem(`${URI}`));
-    //   console.log(mintNFT);
+  const SaveNFT = async () => {
+    // const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/saveAsNFT`, { imgUrl: imgState });
+    const response = await axios.post(`${"http://localhost:4000"}/api/saveAsNFT`, { imgUrl: imgState });
+    console.log(response.data);
   };
 
   const disableConnect = Boolean(wallet) && isConnecting;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    toast({
-      title: "click"
-    })
+    setIsGenerating(true);
+    try {
+      const response = await axios.get(`https://image.pollinations.ai/prompt/${prompt}`, { responseType: 'blob' });
+      if (!response) return setIsGenerating(false);
+
+      const formData = new FormData();
+      formData.append('image', response.data);
+
+      const res = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`,
+        formData
+      )
+      if (!res.data.success) return toast({
+        title: "Error",
+        description: "There was some error while generating the image"
+      })
+      setImgState(res.data.data.display_url);
+
+      toast({
+        title: "Success",
+        description: "Image generated Successfully. Please wait while we prepare the image."
+      })
+    } catch (e) {
+      console.log(e);
+      toast({
+        title: "Error",
+        description: "There was some error while generating the image"
+      })
+    } finally {
+      setPrompt("");
+      setIsGenerating(false);
+    }
   }
 
   return (
@@ -177,8 +137,8 @@ export default function CenteredLayout() {
         <div className="w-full max-w-md space-y-4">
           <div className="bg-white p-4 rounded-lg shadow-md">
             <img
-              src={imgState ?? "https://kzmopto23m9na9vkdrh5.lite.vusercontent.net/placeholder.svg?height=300&width=300"}
-              alt="Centered image"
+              src={imgState || "https://kzmopto23m9na9vkdrh5.lite.vusercontent.net/placeholder.svg?height=300&width=300"}
+              alt="Generated img"
               className="w-full h-auto object-cover rounded"
             />
           </div>
@@ -190,8 +150,13 @@ export default function CenteredLayout() {
               onChange={(e) => setPrompt(e.target.value)}
               className="flex-grow text-black bg-white"
             />
-            <Button disabled={disableConnect} type="submit">Submit</Button>
+            <Button disabled={disableConnect || !prompt} type="submit">Generate</Button>
           </form>
+          <Button
+            className="w-full"
+            disabled={disableConnect || !imgState}
+            onClick={SaveNFT}
+          >Save as NFT</Button>
         </div>
       </main>
     </div>
