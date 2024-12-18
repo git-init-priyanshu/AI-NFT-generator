@@ -7,28 +7,22 @@ router.post("/getImage", async (req, res) => {
   // from stable diffusion's docs
   var options = {
     method: "POST",
-    url: "https://stablediffusionapi.com/api/v3/text2img",
+    url: "https://modelslab.com/api/v6/realtime/text2img",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       key: req.body.key,
       prompt: req.body.prompt,
-      negative_prompt: null,
+      negative_prompt: "bad quality",
       width: "512",
       height: "512",
-      samples: "1",
-      num_inference_steps: "20",
+      safety_checker: false,
       seed: null,
-      guidance_scale: 7.5,
-      safety_checker: "yes",
-      multi_lingual: "no",
-      panorama: "no",
-      self_attention: "no",
-      upscale: "no",
-      embeddings_model: "embeddings_model_id",
+      samples: 1,
+      base64: false,
       webhook: null,
-      track_id: null,
+      track_id: null
     }),
   };
 

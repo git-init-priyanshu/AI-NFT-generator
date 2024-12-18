@@ -1,21 +1,18 @@
-const { ApolloServer } = require("apollo-server-express");
-
 const express = require("express");
 const cors = require("cors");
 
-const { typeDefs } = require("./schema/typeDefs");
-const { resolvers } = require("./schema/resolvers");
+const { generateImage } = require("./routes/generateImage")
+const { saveImgAsNFT } = require("./routes/saveImgAsNFT")
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-const server = new ApolloServer({ typeDefs, resolvers });
-server.start().then(() => {
-  server.applyMiddleware({ app });
-});
+app.post("/api/generateImage", generateImage)
+app.post("/api/saveAsNFT", saveImgAsNFT)
 
-app.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+const PORT = 4000;
+app.listen(PORT, () =>
+  console.log(`🚀 Server ready at http://localhost:${PORT}`)
 );
