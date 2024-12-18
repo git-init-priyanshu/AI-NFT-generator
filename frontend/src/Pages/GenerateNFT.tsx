@@ -8,7 +8,8 @@ import { NFTcontext } from "@/NFTcontext";
 import { useToast } from "@/hooks/use-toast.ts";
 import Navbar from "@/components/navbar"
 
-import { formatBalance, formatChainAsNum } from "../contract/utils/util.tsx";
+import { formatBalance } from "../contract/utils/util.tsx";
+import { LoaderCircle } from "lucide-react";
 
 export default function CenteredLayout() {
   const { setAccount } = useContext(NFTcontext);
@@ -19,6 +20,7 @@ export default function CenteredLayout() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [imgState, setImgState] = useState<string | null>(null);
 
   // Connecting to metamask
@@ -88,9 +90,25 @@ export default function CenteredLayout() {
   };
 
   const SaveNFT = async () => {
-    // const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/saveAsNFT`, { imgUrl: imgState });
-    const response = await axios.post(`${"http://localhost:4000"}/api/saveAsNFT`, { imgUrl: imgState });
-    console.log(response.data);
+    setIsUploading(true);
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/saveAsNFT`, { imgUrl: imgState });
+      if (response.data.success) {
+        toast({
+          title: "Success",
+          description: response.data.data
+        })
+        setIsUploading(false);
+      }
+    } catch (e) {
+      console.log(e);
+      toast({
+        title: "Error",
+        description: e.msg
+      })
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const disableConnect = Boolean(wallet) && isConnecting;
@@ -150,13 +168,25 @@ export default function CenteredLayout() {
               onChange={(e) => setPrompt(e.target.value)}
               className="flex-grow text-black bg-white"
             />
-            <Button disabled={disableConnect || !prompt} type="submit">Generate</Button>
+            <Button disabled={disableConnect || !prompt} type="submit">
+              <p className={`${isGenerating ? "opacity-50" : ""}`}>Generate</p>
+              {isGenerating ?
+                <LoaderCircle className="animate-spin absolute" />
+                : <></>
+              }
+            </Button>
           </form>
           <Button
-            className="w-full"
+            className="w-full relative"
             disabled={disableConnect || !imgState}
             onClick={SaveNFT}
-          >Save as NFT</Button>
+          >
+            <p className={`${isUploading ? "opacity-50" : ""}`}>Save as NFT</p>
+            {isUploading ?
+              <LoaderCircle className="animate-spin absolute" />
+              : <></>
+            }
+          </Button>
         </div>
       </main>
     </div>
