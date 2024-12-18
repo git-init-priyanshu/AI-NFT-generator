@@ -22,7 +22,7 @@ export default function Navbar({ wallet, connectWallet, disableConnect }: Navbar
       )}
       <Button disabled={disableConnect} onClick={connectWallet} className="flex gap-2">
         <img src={metamask} className="w-8" />
-        <p>Connect</p>
+        {wallet.accounts[0] !== "none" ? <p>Connected</p> : <p>Connect</p>}
       </Button>
     </nav>
   )
