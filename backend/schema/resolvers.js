@@ -3,39 +3,39 @@ const axiosRetry = require("axios-retry");
 const FormData = require("form-data");
 require("dotenv").config();
 
-const fetchingQueuedImage = async (key, request_id) => {
-  return new Promise(async (resolve, reject) => {
-    var raw = JSON.stringify({
-      key: key,
-      request_id: request_id,
-    });
-
-    var requestOptions = {
-      method: "POST",
-      url: "https://stablediffusionapi.com/api/v4/dreambooth/fetch",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: raw,
-      redirect: "follow",
-    };
-
-    try {
-      const res = await axios(requestOptions);
-      console.log(res.data);
-      if (res.data.status === "success") {
-        resolve(res.data); // Resolve the promise with the desired value
-      } else if (res.data.status === "processing") {
-        // Calling the function until the processing is done
-        setTimeout(async () => {
-          await fetchingQueuedImage(key, request_id);
-        }, 5000);
-      }
-    } catch (error) {
-      reject(error); // Reject the promise with the error
-    }
-  });
-};
+// const fetchingQueuedImage = async (key, request_id) => {
+//   return new Promise(async (resolve, reject) => {
+//     var raw = JSON.stringify({
+//       key: key,
+//       request_id: request_id,
+//     });
+//
+//     var requestOptions = {
+//       method: "POST",
+//       url: "https://stablediffusionapi.com/api/v4/dreambooth/fetch",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: raw,
+//       redirect: "follow",
+//     };
+//
+//     try {
+//       const res = await axios(requestOptions);
+//       console.log(res.data);
+//       if (res.data.status === "success") {
+//         resolve(res.data); // Resolve the promise with the desired value
+//       } else if (res.data.status === "processing") {
+//         // Calling the function until the processing is done
+//         setTimeout(async () => {
+//           await fetchingQueuedImage(key, request_id);
+//         }, 5000);
+//       }
+//     } catch (error) {
+//       reject(error); // Reject the promise with the error
+//     }
+//   });
+// };
 
 const uploadImage = (sourceUrl) => {
   return new Promise(async (resolve, reject) => {
@@ -118,29 +118,29 @@ const resolvers = {
       try {
         let options = {
           method: "POST",
-          url: "https://stablediffusionapi.com/api/v3/text2img",
+          url: `https://image.pollinations.ai/prompt/${args.prompt}`,
           headers: {
             "Content-Type": "application/json",
           },
-          data: {
-            key: args.key,
-            prompt: args.prompt,
-            negative_prompt: null,
-            width: "512",
-            height: "512",
-            samples: "1",
-            num_inference_steps: "20",
-            seed: null,
-            guidance_scale: 7.5,
-            safety_checker: "no",
-            multi_lingual: "no",
-            panorama: "no",
-            self_attention: "no",
-            upscale: "no",
-            embeddings_model: "embeddings_model_id",
-            webhook: null,
-            track_id: null,
-          },
+          // data: {
+          //   key: args.key,
+          //   prompt: args.prompt,
+          //   negative_prompt: null,
+          //   width: "512",
+          //   height: "512",
+          //   samples: "1",
+          //   num_inference_steps: "20",
+          //   seed: null,
+          //   guidance_scale: 7.5,
+          //   safety_checker: "no",
+          //   multi_lingual: "no",
+          //   panorama: "no",
+          //   self_attention: "no",
+          //   upscale: "no",
+          //   embeddings_model: "embeddings_model_id",
+          //   webhook: null,
+          //   track_id: null,
+          // },
         };
 
         const response = await axios(options);
