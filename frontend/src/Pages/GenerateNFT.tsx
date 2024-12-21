@@ -11,11 +11,11 @@ import Navbar from "@/components/navbar"
 import { formatBalance } from "../contract/utils/util.tsx";
 import { LoaderCircle } from "lucide-react";
 
+const initialState = { accounts: ["none"], balance: "", chainId: "" };
 export default function CenteredLayout() {
   const { setAccount } = useContext(NFTcontext);
   const { toast } = useToast();
 
-  const initialState = { accounts: ["none"], balance: "", chainId: "" };
   const [wallet, setWallet] = useState(initialState);
   const [isConnecting, setIsConnecting] = useState(false);
   const [prompt, setPrompt] = useState<string>("");
@@ -46,6 +46,7 @@ export default function CenteredLayout() {
           method: "eth_accounts",
         });
         refreshAccounts(accounts);
+
         window.ethereum.on("accountsChanged", refreshAccounts);
         window.ethereum.on("chainChanged", refreshChain);
       }
@@ -79,7 +80,7 @@ export default function CenteredLayout() {
         method: "eth_requestAccounts",
         params: [],
       })
-      .then((accounts: ["none"]) => {
+      .then((accounts) => {
         updateWallet(accounts);
         accounts && setAccount(accounts[0]);
       })
@@ -92,7 +93,7 @@ export default function CenteredLayout() {
   const SaveNFT = async () => {
     setIsUploading(true);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/saveAsNFT`, { imgUrl: imgState });
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/saveAsNFT`, { imgUrl: imgState });
       if (response.data.success) {
         toast({
           title: "Success",

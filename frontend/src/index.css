@@ -10,7 +10,7 @@ body {
   width: 100%;
   font-family: "Inter", sans-serif;
   background-color: white !important;
-  background-image: url("assets/paper-texture-background-zlvqcgwohwvd642j.jpg");
+  color: black !important;
 }
 
 .img-shadow {
