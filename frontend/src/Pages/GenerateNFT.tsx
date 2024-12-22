@@ -99,7 +99,6 @@ export default function CenteredLayout() {
     })
 
     try {
-      console.log(imgData)
       const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/saveAsNFT`, { data: imgData }, {
         headers: {
           'Content-Type': `application/json`,
@@ -117,7 +116,6 @@ export default function CenteredLayout() {
         description: response.data.msg
       })
     } catch (e) {
-      console.log(e);
       toast({
         title: "Error",
         description: "Internal server error."
@@ -155,7 +153,6 @@ export default function CenteredLayout() {
       // To have display url
       setImgUrl(`data:image/jpeg;base64,${base64String}`);
     } catch (e) {
-      console.log(e);
       toast({
         title: "Error",
         description: "There was some error while generating the image"
