@@ -21,7 +21,8 @@ export default function CenteredLayout() {
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [imgState, setImgState] = useState<string | null>(null);
+  const [imgData, setImgData] = useState<string | null>(null);
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
 
   // Connecting to metamask
   useEffect(() => {
@@ -92,8 +93,18 @@ export default function CenteredLayout() {
 
   const SaveNFT = async () => {
     setIsUploading(true);
+    toast({
+      title: "Creating NFT",
+      description: "Please wait."
+    })
+
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/saveAsNFT`, { imgUrl: imgState });
+      console.log(imgData)
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/saveAsNFT`, { data: imgData }, {
+        headers: {
+          'Content-Type': `application/json`,
+        },
+      });
       if (response.data.success) {
         toast({
           title: "Success",
@@ -101,11 +112,15 @@ export default function CenteredLayout() {
         })
         setIsUploading(false);
       }
+      toast({
+        title: "Error",
+        description: response.data.msg
+      })
     } catch (e) {
       console.log(e);
       toast({
         title: "Error",
-        description: e.msg
+        description: "Internal server error."
       })
     } finally {
       setIsUploading(false);
@@ -117,26 +132,28 @@ export default function CenteredLayout() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsGenerating(true);
+
+    toast({
+      title: "Generating",
+      description: "Please wait."
+    })
     try {
-      const response = await axios.get(`https://image.pollinations.ai/prompt/${prompt}`, { responseType: 'blob' });
+      const response = await axios.get(`https://image.pollinations.ai/prompt/${prompt}`, {
+        responseType: 'arraybuffer'
+      });
       if (!response) return setIsGenerating(false);
-
-      const formData = new FormData();
-      formData.append('image', response.data);
-
-      const res = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`,
-        formData
-      )
-      if (!res.data.success) return toast({
-        title: "Error",
-        description: "There was some error while generating the image"
-      })
-      setImgState(res.data.data.display_url);
-
       toast({
         title: "Success",
-        description: "Image generated Successfully. Please wait while we prepare the image."
+        description: "Image generated Successfully."
       })
+
+      // For server
+      const binary = String.fromCharCode(...new Uint8Array(response.data));
+      const base64String = btoa(binary);
+      setImgData(base64String);
+
+      // To have display url
+      setImgUrl(`data:image/jpeg;base64,${base64String}`);
     } catch (e) {
       console.log(e);
       toast({
@@ -156,7 +173,7 @@ export default function CenteredLayout() {
         <div className="w-full max-w-md space-y-4">
           <div className="bg-white p-4 rounded-lg shadow-md">
             <img
-              src={imgState || "https://kzmopto23m9na9vkdrh5.lite.vusercontent.net/placeholder.svg?height=300&width=300"}
+              src={imgUrl || "https://kzmopto23m9na9vkdrh5.lite.vusercontent.net/placeholder.svg?height=300&width=300"}
               alt="Generated img"
               className="w-full h-auto object-cover rounded"
             />
@@ -179,7 +196,7 @@ export default function CenteredLayout() {
           </form>
           <Button
             className="w-full relative"
-            disabled={disableConnect || !imgState}
+            disabled={disableConnect || !imgUrl}
             onClick={SaveNFT}
           >
             <p className={`${isUploading ? "opacity-50" : ""}`}>Save as NFT</p>
