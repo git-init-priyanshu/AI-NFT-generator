@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "cd frontend && npm run dev",
-    "server": "cd backend && nodemon index.js",
+    "server": "cd backend && npm run dev",
     "dev": "concurrently \"npm run client\" \"npm run server\""
   },
   "keywords": [],

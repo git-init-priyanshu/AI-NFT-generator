@@ -1,27 +1,31 @@
 const axios = require("axios");
+const pinataWeb3 = require("pinata-web3")
 const ethers = require("ethers");
-const axiosRetry = require("axios-retry");
-const FormData = require("form-data");
 require("dotenv").config();
 
 const abi = require("../contract_abi.json");
 
 const contractAddress = "0xF05CdcC75b9264a5B0e3F4D53ce837Fe0327077F";
 
+const pinata = new pinataWeb3.PinataSDK({
+  pinataJwt: process.env.PINATA_API_JWT || "",
+  pinataGateway: "orange-general-mockingbird-357.mypinata.cloud",
+});
+
 const saveImgAsNFT = async (req, res) => {
-  const { imgUrl } = req.body;
-  console.log(imgUrl);
+  const { data: imgData } = req.body;
 
   try {
-    const response = await uploadToPinata(imgUrl);
-    if (!response) return res.json({ success: false, msg: "Could not upload to IPFS" })
+    // Uploading image to pinata
+    const response = await pinata.upload.base64(imgData);
+    if (!response) throw new Error({ success: false, msg: "Could not upload to IPFS" });
     console.log("Uploaded image to  pinata");
 
     // Getting hash of latest upload
     const hash = response.IpfsHash;
     const url = `https://gateway.pinata.cloud/ipfs/${hash}`;
 
-    // Uploading metadata
+    // Uploading metadata to pinata
     const metaData = await uploadMetadata(url);
     if (!metaData) return res.json({ success: false, msg: "Could not upload metadata to IPFS" })
     console.log("Uploaded metadata to pinata");
@@ -33,57 +37,24 @@ const saveImgAsNFT = async (req, res) => {
 
     // Minting NFT
     const mintResponse = await mintNFT(token_URI);
-    if (!mintResponse.success) return res.json({ success: false, msg: mintResponse.msg });
+    if (!mintResponse.success) throw new Error({ success: false, msg: mintResponse.msg });
     console.log("Minted the NFT");
 
     res.json({ success: true, data: mintResponse.data })
   } catch (error) {
-    console.log(error);
     res.json({ success: false, msg: error.msg })
   }
 }
 
 module.exports = { saveImgAsNFT };
 
-const uploadToPinata = async (sourceUrl) => {
-  return new Promise(async (resolve, reject) => {
-    // const axiosInstance = axios.create();
-    // axiosRetry(axiosInstance, { retries: 5 });
-
-    const data = new FormData();
-
-    try {
-      const response = await axios.get(sourceUrl, {
-        responseType: "stream",
-      });
-      data.append(`file`, response.data, "image.jpg");
-
-      const res = await axios.post(
-        "https://api.pinata.cloud/pinning/pinFileToIPFS",
-        data,
-        {
-          maxBodyLength: Infinity,
-          headers: {
-            "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
-            Authorization: `Bearer ${process.env.PINATA_API_JWT}`,
-          },
-        },
-      );
-      console.log("here2")
-      resolve(res.data); // Resolve the promise with the desired value
-    } catch (error) {
-      reject(error); // Reject the promise with the error
-    }
-  });
-};
-
 const uploadMetadata = async (url) => {
+  var metaData = JSON.stringify({
+    name: "My NFT",
+    description: "Description of my NFT",
+    image: `${url}`,
+  });
   return new Promise(async (resolve, reject) => {
-    var metaData = JSON.stringify({
-      name: "My NFT",
-      description: "Description of my NFT",
-      image: `${url}`,
-    });
     try {
       const res = await axios.post(
         "https://api.pinata.cloud/pinning/pinJSONToIPFS",
@@ -95,37 +66,40 @@ const uploadMetadata = async (url) => {
           },
         }
       );
-
-      resolve(res.data);
+      resolve({ success: true, data: res.data });
     } catch (error) {
-      reject(error);
+      reject({ success: false, msg: "Could not upload the metadata." });
     }
   });
 };
 
 const mintNFT = async (token_URI) => {
-  try {
-    const privateKey = process.env.PRIVATE_KEY;
-    const providerURL = process.env.QUICKNODE_URI;
+  return new Promise(async (resolve, reject) => {
+    try {
+      const privateKey = process.env.PRIVATE_KEY;
+      const providerURL = process.env.QUICKNODE_URI;
 
-    // Getting provider
-    console.log("provider")
-    const provider = ethers.getDefaultProvider(providerURL);
-    // Getting signer
-    console.log("signer")
-    const signer = new ethers.Wallet(privateKey, provider);
-    // Getting the deployed contract
-    console.log("contract")
-    const contract = new ethers.Contract(contractAddress, abi, signer);
+      // Getting provider
+      const provider = ethers.getDefaultProvider(providerURL);
+      console.log("provider")
 
-    // Mint the NFT
-    console.log("mint")
-    await contract.awardItem(`${token_URI}`);
-    console.log("Success")
+      // Getting signer
+      const signer = new ethers.Wallet(privateKey, provider);
+      console.log("signer")
 
-    return { success: true, data: "Successfully minted the NFT" }
-  } catch (error) {
-    console.log(error);
-    return { success: false, msg: "Could not mint the NFT" }
-  }
+      // Getting the deployed contract
+      const contract = new ethers.Contract(contractAddress, abi, signer);
+      console.log("contract")
+
+      // Mint the NFT
+      await contract.awardItem(`${token_URI}`);
+      console.log("mint")
+
+      resolve({ success: true, data: "Successfully minted the NFT" })
+    } catch (error) {
+      let errMsg = "Could not mint the NFT";
+      if (error.info.error.code === -32000) errMsg = "Insufficient funds in your wallet. Please add funds to proceed with the transaction."
+      reject({ success: false, msg: errMsg })
+    }
+  })
 }
