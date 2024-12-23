@@ -24,10 +24,14 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Routes
+app.get("/api/health", (req, res) =>{
+  console.log("Health route triggered");
+  res.send("Server is in good health.");
+})
 app.post("/api/generateImage", generateImage)
 app.post("/api/saveAsNFT", saveImgAsNFT)
 
-const PORT = 5000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () =>
   console.log(`🚀 Server ready at http://localhost:${PORT}`)
 );
