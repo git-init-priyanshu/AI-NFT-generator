@@ -4,6 +4,7 @@ const axios = require("axios");
 require("dotenv").config();
 
 const generateImage = async (req, res) => {
+  console.log("/api/generateImage")
   const { prompt } = req.body;
 
   try {

@@ -13,19 +13,13 @@ const whitelist = [
   'https://ai-nft-generator.netlify.app'
 ]
 const corsOptions = {
-  origin: function(origin, callback) {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
+  origin: whitelist,
 }
 app.use(cors(corsOptions));
 
 // Routes
 app.get("/api/health", (req, res) =>{
-  console.log("Health route triggered");
+  console.log("/api/health");
   res.send("Server is in good health.");
 })
 app.post("/api/generateImage", generateImage)

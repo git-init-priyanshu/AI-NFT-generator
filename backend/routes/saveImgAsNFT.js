@@ -13,6 +13,7 @@ const pinata = new pinataWeb3.PinataSDK({
 });
 
 const saveImgAsNFT = async (req, res) => {
+  console.log("/api/saveAsNFT")
   const { data: imgData } = req.body;
 
   try {
@@ -98,7 +99,8 @@ const mintNFT = async (token_URI) => {
       resolve({ success: true, data: "Successfully minted the NFT" })
     } catch (error) {
       let errMsg = "Could not mint the NFT";
-      if (error.info.error.code === -32000) errMsg = "Insufficient funds in your wallet. Please add funds to proceed with the transaction."
+      if (error?.info?.error?.code === -32000) errMsg = "Insufficient funds in your wallet. Please add funds to proceed with the transaction."
+      console.log(errMsg);
       reject({ success: false, msg: errMsg })
     }
   })
