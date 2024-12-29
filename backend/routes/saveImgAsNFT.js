@@ -14,11 +14,11 @@ const pinata = new pinataWeb3.PinataSDK({
 
 const saveImgAsNFT = async (req, res) => {
   console.log("/api/saveAsNFT")
-  const { data: imgData } = req.body;
+  const { imgUrl } = req.body;
 
   try {
     // Uploading image to pinata
-    const response = await pinata.upload.base64(imgData);
+    const response = await pinata.upload.url(imgUrl);
     if (!response) throw new Error({ success: false, msg: "Could not upload to IPFS" });
     console.log("Uploaded image to  pinata");
 

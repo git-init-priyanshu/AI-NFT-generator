@@ -21,7 +21,6 @@ export default function CenteredLayout() {
   const [prompt, setPrompt] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [imgData, setImgData] = useState<string | null>(null);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
 
   // Connecting to metamask
@@ -99,7 +98,7 @@ export default function CenteredLayout() {
     })
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/saveAsNFT`, { data: imgData }, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/saveAsNFT`, { imgUrl }, {
         headers: {
           'Content-Type': `application/json`,
         },
@@ -136,22 +135,14 @@ export default function CenteredLayout() {
       description: "Please wait."
     })
     try {
-      const response = await axios.get(`https://image.pollinations.ai/prompt/${prompt}`, {
-        responseType: 'arraybuffer'
-      });
-      if (!response) return setIsGenerating(false);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/generateImage`, { prompt });
+      if (!response.data.success) return setIsGenerating(false);
       toast({
         title: "Success",
         description: "Image generated Successfully."
       })
 
-      // For server
-      const binary = String.fromCharCode(...new Uint8Array(response.data));
-      const base64String = btoa(binary);
-      setImgData(base64String);
-
-      // To have display url
-      setImgUrl(`data:image/jpeg;base64,${base64String}`);
+      setImgUrl(response.data.data)
     } catch (e) {
       toast({
         title: "Error",
